@@ -3,7 +3,8 @@ import listAction from "@/core/listAction";
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 import {Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
-import {post} from "@/core/httpClient";
+import {post, put} from "@/core/httpClient";
+import {toast} from "react-toastify";
 
 const UpdateRecipeDialog = ({isOpen}) => {
     const {state, dispatch} = useListActions();
@@ -27,7 +28,10 @@ const UpdateRecipeDialog = ({isOpen}) => {
         setValue("id", state.row.id);
         setValue("title", state.row.title);
         setValue("description", state.row.description);
-        setValue("imagePath", state.row.imagePath)
+        setValue("imagePath", state.row.imagePath);
+        if (isOpen) {
+            let userId  = state.row.user;
+        }
     }, [state]);
 
     return (
@@ -85,7 +89,10 @@ const UpdateRecipeDialog = ({isOpen}) => {
                     type="button"
                     onClick={() => {
                         handleSubmit(async (data) => {
-                            let result = await post("/recipe/update", data);
+                            let result = await put("/recipe/update", data);
+                            if (result && result.status === 200) {
+                                toast.success("Updated successfully");
+                            }
                             dispatch({
                                 type: listAction.RELOAD
                             })
@@ -99,7 +106,6 @@ const UpdateRecipeDialog = ({isOpen}) => {
             </ModalFooter>
         </Modal>
     )
-
 }
 
 export default UpdateRecipeDialog;

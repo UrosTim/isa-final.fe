@@ -2,8 +2,9 @@ import {Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reac
 import {useListActions} from "@/contexts/listActionContext";
 import listAction from "@/core/listAction";
 import {useForm} from "react-hook-form";
-import {post} from "@/core/httpClient";
-import {useEffect} from "react";
+import {post, put} from "@/core/httpClient";
+import React, {useEffect} from "react";
+import {toast} from "react-toastify";
 
 const UpdateUserDialog = ({isOpen}) => {
     const {state, dispatch} = useListActions();
@@ -28,6 +29,7 @@ const UpdateUserDialog = ({isOpen}) => {
         setValue("lastName", state.row.lastName);
         setValue("email", state.row.email);
         setValue("id", state.row.id);
+        setValue("role", "USER");
     }, [state]);
 
     return (
@@ -94,6 +96,15 @@ const UpdateUserDialog = ({isOpen}) => {
                         )}
                     </Col>
                 </Row>
+                <Row style={{display:"none"}}>
+                    <Col>
+                        <input
+                            type="text"
+                            className="form-control"
+                            {...register("role")}
+                        />
+                    </Col>
+                </Row>
             </ModalBody>
             <ModalFooter>
                 <Button
@@ -101,7 +112,10 @@ const UpdateUserDialog = ({isOpen}) => {
                     type="button"
                     onClick={() => {
                         handleSubmit(async (data) => {
-                            let result = await post("/user/update", data);
+                            let result = await put("/user/update", data);
+                            if (result && result.status === 200) {
+                                toast.success("Updated successfully");
+                            }
                             dispatch({
                                 type: listAction.RELOAD
                             })

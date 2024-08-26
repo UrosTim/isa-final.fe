@@ -1,0 +1,25 @@
+'use client'
+
+import {useSession} from "next-auth/react";
+import {Row, Spinner} from "reactstrap";
+
+export default function SessionStatusWrapper({children}) {
+    const {data: session, status} = useSession();
+
+    if (session && session.user){
+        console.log(session.decoded)
+    }
+
+    return (
+        <>
+            {status === "loading" ?
+                <Row className="d-flex justify-content-center align-items-center" style={{minHeight: "100vh"}}>
+                    <Spinner/>
+                </Row> :
+                <>
+                    {children}
+                </>
+            }
+        </>
+    );
+}

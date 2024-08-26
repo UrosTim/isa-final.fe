@@ -15,7 +15,9 @@ const listActionReducer = (state, action) => {
         case listAction.RELOAD:
             return {...initialState, reload: true};
         case listAction.UPDATE:
-            return {...state, row: action.payload, type: action.type};
+            return {...state, row: action.payload, type: listAction.UPDATE};
+        case listAction.DELETE:
+            return {...state, row: action.payload, type: listAction.DELETE};
         case listAction.RESET:
             return initialState;
         default:
@@ -45,4 +47,4 @@ const useListActions = () => {
     return context;
 }
 
-export { ListActionProvider, useListActions };
+export {ListActionProvider, useListActions};
