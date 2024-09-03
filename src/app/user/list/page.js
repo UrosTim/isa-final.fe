@@ -10,6 +10,7 @@ import listAction from "@/core/listAction";
 import AllUserDialogs from "@/elements/User/AllUserDialogs";
 import Link from "next/link";
 import {useSession} from "next-auth/react";
+import useAuth from "@/hooks/useAuth";
 
 export const tableColumns = [
     {
@@ -95,6 +96,9 @@ export default function UserList() {
     };
 
     const {data: session, status} = useSession();
+    const AxiosAuth = useAuth();
+
+
 
     return (
         <>

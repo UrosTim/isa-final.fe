@@ -43,7 +43,7 @@ export default function Header() {
                         <li><Link href="#" className="nav-link px-2 link-dark">Pricing</Link></li>
                         <li><Link href="/user/list"
                                   className="nav-link px-2 link-dark link-opacity-50-hover">Users</Link></li>
-                        <li><Link href="/user/create" className="nav-link px-2 link-dark">About</Link></li>
+                        <li><Link href="#" className="nav-link px-2 link-dark">About</Link></li>
                     </ul>
 
                     <div className="col-md-3 text-end">
@@ -53,7 +53,7 @@ export default function Header() {
                                     href="/"
                                     className="me-2 text-decoration-none"
                                     style={{ color: 'gray', textDecoration: 'none' }}
-                                    onMouseOver={(e) => (e.target.style.color = '#007bff')}
+                                    onMouseOver={(e) => (e.target.style.color = '#eba99d')}
                                     onMouseOut={(e) => (e.target.style.color = 'gray')}
                                 >
                                     {session.decoded.email}
