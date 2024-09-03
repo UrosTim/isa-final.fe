@@ -3,11 +3,14 @@
 import {useListData} from "@/hooks/useListData";
 import {useEffect, useState} from "react";
 import DataTable from "react-data-table-component";
-import {Button, Spinner} from "reactstrap";
+import {Button, Card, CardBody, CardHeader, Spinner} from "reactstrap";
 import {MdDelete, MdEdit} from "react-icons/md";
 import {useListActions} from "@/contexts/listActionContext";
 import listAction from "@/core/listAction";
 import AllUserDialogs from "@/elements/User/AllUserDialogs";
+import Link from "next/link";
+import {useSession} from "next-auth/react";
+import useAuth from "@/hooks/useAuth";
 
 export const tableColumns = [
     {
@@ -92,27 +95,43 @@ export default function UserList() {
         setPageSize(newPerPage);
     };
 
+    const {data: session, status} = useSession();
+    const AxiosAuth = useAuth();
+
+
+
     return (
         <>
-            <div>
-                <Button color="primary" onClick={toggle}>
-                    Add New User
-                </Button>
+            <div style={{padding: '2%', textAlign: 'center', margin: 'auto'}}>
+                <h1 className="mb-5">List of users</h1>
+                <Card>
+                    <CardHeader className="d-flex justify-content-end">
+                        <Link href="/user/create" className="text-decoration-none">
+                            <Button className="btn btn-success d-flex justify-content-end"
+                                    type="button"
+                                    onClick={toggle}>
+                                Add New User
+                            </Button>
+                        </Link>
+                    </CardHeader>
+                    <CardBody>
+                        {data != null && <DataTable data={data.users}
+                                                    columns={tableColumns}
+                                                    striped={true}
+                                                    noHeader={true}
+                                                    pagination
+                                                    paginationServer
+                                                    progressPending={loading}
+                                                    paginationTotalRows={data.totalElements}
+                                                    onChangePage={handlePageChange}
+                                                    onChangeRowsPerPage={handlePerRowsChange}
+                                                    progressComponent={<Spinner color="danger">Loading...</Spinner>}
+                                                    highlightOnHover
+                        />}
+                    </CardBody>
+                </Card>
+                <AllUserDialogs/>
             </div>
-            {data != null && <DataTable data={data.users}
-                                        columns={tableColumns}
-                                        striped={true}
-                                        noHeader={true}
-                                        pagination
-                                        paginationServer
-                                        progressPending={loading}
-                                        paginationTotalRows={data.totalElements}
-                                        onChangePage={handlePageChange}
-                                        onChangeRowsPerPage={handlePerRowsChange}
-                                        progressComponent={<Spinner color="danger">Loading...</Spinner>}
-                                        highlightOnHover
-            />}
-            <AllUserDialogs/>
         </>
     );
 }

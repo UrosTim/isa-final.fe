@@ -1,30 +1,40 @@
 'use client'
 
 import {useListData} from "@/hooks/useListData";
-import React, {useEffect} from "react";
-import {Button, Card, CardBody, CardHeader, CardText, CardTitle} from "reactstrap";
+import React, {useCallback, useEffect} from "react";
+import {Button, Card, CardBody, CardHeader, CardSubtitle, CardText, CardTitle} from "reactstrap";
 import Image from "next/image";
-import Link from "next/link";
 import listAction from "@/core/listAction";
+import Link from "next/link";
+import AllRecipeDialogs from "@/elements/Recipe/AllRecipeDialogs";
+import {useListActions} from "@/contexts/listActionContext";
 
 export default function ViewRecipe({ params }) {
 
-    const {getData, loading, data} = useListData(`recipe/${params.recipeId}`);
+    const url = `recipe/${params.recipeId}`;
+    const {getData, loading, data} = useListData(url);
+
+    const {state, dispatch} = useListActions();
 
     useEffect(() => {
-        getData(`recipe/${params.recipeId}`);
-    }, []);
+        getData(url);
+    }, [])
+
+    useEffect(() => {
+        if (state.reload) {
+            getData(url)
+        }
+    }, [state]);
 
     return (
         <>
-            <Button
-                className="btn btn-success"
-                type="button"
-                onClick={() => {
-                    router.push("/recipe/list");
-                }}>
-                Go back
-            </Button>
+            <Link href="/recipe/list">
+                <Button
+                    className="btn btn-success"
+                    type="button">
+                    Go back
+                </Button>
+            </Link>
             <Card style={{padding: '.5rem', textAlign: 'center', marginBottom: '1.5rem', marginTop: '1.5rem'}}>
                 <CardHeader style={{position: 'relative', width: '100%', height: '500px'}}>
                     <Image
@@ -49,7 +59,7 @@ export default function ViewRecipe({ params }) {
                             onClick={() => {
                                 dispatch({
                                     type: listAction.UPDATE,
-                                    payload: recipe
+                                    payload: data
                                 })
                             }}>
                             Edit
@@ -60,6 +70,7 @@ export default function ViewRecipe({ params }) {
                     </div>
                 </CardBody>
             </Card>
+            <AllRecipeDialogs />
         </>
     )
 }

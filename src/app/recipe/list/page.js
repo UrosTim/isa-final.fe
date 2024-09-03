@@ -1,7 +1,7 @@
 'use client'
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, Card, CardBody, CardHeader, CardText, CardTitle, Col, Row} from "reactstrap";
+import {Button, Card, CardBody, CardHeader, CardSubtitle, CardText, CardTitle, Col, Row} from "reactstrap";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 import {useListActions} from "@/contexts/listActionContext";
@@ -38,7 +38,7 @@ export default function RecipeList() {
                         onClick={() => {
                             router.push("/recipe/create");
                         }}>
-                        Create New Recipe
+                        Add New Recipe
                     </Button>
                 </div>
                 <div>
@@ -67,6 +67,9 @@ export default function RecipeList() {
                                                 }}>
                                                 {recipe.title}
                                             </CardTitle>
+                                            <CardSubtitle className="text-black-50">
+                                                By {recipe.user.firstName} {recipe.user.lastName}
+                                            </CardSubtitle>
                                             <CardText style={{
                                                 overflow: 'hidden',
                                                 whiteSpace: 'nowrap',
@@ -90,8 +93,16 @@ export default function RecipeList() {
                                                     }}>
                                                     Edit
                                                 </Button>
-                                                <Button color='danger'>
-                                                    Remove
+                                                <Button
+                                                    color="danger"
+                                                    className="mx-2"
+                                                    onClick={() => {
+                                                        dispatch({
+                                                            type: listAction.DELETE,
+                                                            payload: recipe
+                                                        })
+                                                    }}>
+                                                    Delete
                                                 </Button>
                                             </div>
                                         </CardBody>

@@ -1,8 +1,12 @@
 import {Inter} from "next/font/google";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {ListActionProvider} from "@/contexts/listActionContext";
+import {ToastContainer} from "react-toastify";
+import Provider from "@/app/providers";
+import SessionStatusWrapper from "@/components/Session/SessionStatusWrapper";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -15,15 +19,20 @@ export default function RootLayout({children}) {
     return (
         <html lang="en">
         <body>
-        <div className="container py-2">
-            <Header />
-            <ListActionProvider>
-                <main style={{minHeight: "71vh"}}>
-                    {children}
-                </main>
-            </ListActionProvider>
-            <Footer/>
-        </div>
+        <Provider>
+            <SessionStatusWrapper>
+                <div className="container py-3">
+                    <Header/>
+                    <main>
+                        <ListActionProvider>
+                            {children}
+                        </ListActionProvider>
+                    </main>
+                    <Footer/>
+                    <ToastContainer/>
+                </div>
+            </SessionStatusWrapper>
+        </Provider>
         </body>
         </html>
     );
